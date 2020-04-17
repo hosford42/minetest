@@ -93,6 +93,7 @@ src/cmake_config_githash.h
 src/unittest/test_world/world.mt
 src/lua/build/
 locale/
+.buildconfig
 .directory
 *.cbp
 *.layout
