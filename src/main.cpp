@@ -187,7 +187,13 @@ int main(int argc, char *argv[])
 #ifndef __ANDROID__
 	// Run unit tests
 	if (cmd_args.getFlag("run-unittests")) {
+#if BUILD_UNITTESTS
 		return run_tests();
+#else
+		errorstream << "Unittest support is not enabled in this binary. "
+			<< "If you want to enable it, compile project with BUILD_UNITTESTS=1 flag."
+			<< std::endl;
+#endif
 	}
 #endif
 
@@ -457,7 +463,6 @@ static bool create_userdata_path()
 	} else {
 		success = true;
 	}
-	porting::copyAssets();
 #else
 	// Create user data directory
 	success = fs::CreateDir(porting::path_user);
@@ -776,7 +781,7 @@ static bool determine_subgame(GameParams *game_params)
 			gamespec = findSubgame(g_settings->get("default_game"));
 			infostream << "Using default gameid [" << gamespec.id << "]" << std::endl;
 			if (!gamespec.isValid()) {
-				errorstream << "Subgame specified in default_game ["
+				errorstream << "Game specified in default_game ["
 				            << g_settings->get("default_game")
 				            << "] is invalid." << std::endl;
 				return false;
@@ -801,7 +806,7 @@ static bool determine_subgame(GameParams *game_params)
 	}
 
 	if (!gamespec.isValid()) {
-		errorstream << "Subgame [" << gamespec.id << "] could not be found."
+		errorstream << "Game [" << gamespec.id << "] could not be found."
 		            << std::endl;
 		return false;
 	}
