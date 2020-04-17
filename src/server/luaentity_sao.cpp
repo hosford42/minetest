@@ -112,6 +112,16 @@ void LuaEntitySAO::addedToEnvironment(u32 dtime_s)
 	}
 }
 
+void LuaEntitySAO::removingFromEnvironment()
+{
+	ServerActiveObject::removingFromEnvironment();
+
+	if(m_registered){
+		// Notify entity of deactivation
+		m_env->getScriptIface()->luaentity_on_deactivate(m_id);
+	}
+}
+
 void LuaEntitySAO::step(float dtime, bool send_recommended)
 {
 	if(!m_properties_sent)
